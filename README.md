@@ -1,5 +1,7 @@
 # Polka L1 Blockchain
 
+NOT DONE
+
 Polka is a high-performance Layer 1 blockchain built entirely in **Zig**. It is designed for extreme predictability, deterministic execution, and maximum hardware utilization.
 
 ## Unique Tech Stack
