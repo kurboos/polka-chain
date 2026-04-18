@@ -1,0 +1,13 @@
+.{
+    .name = "polka-l1",
+    .version = "0.1.0",
+    .dependencies = .{
+        // Networking and crypto dependencies will go here
+    },
+    .paths = .{
+        "build.zig",
+        "build.zig.zon",
+        "src",
+        "README.md",
+    },
+}
