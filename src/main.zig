@@ -39,7 +39,7 @@ pub fn main() void {
     std.debug.print("Polka L1 Blockchain\n", .{});
 
     const genesis = createGenesisBlock();
-
+    
     std.debug.print("Genesis Block:\n", .{});
     std.debug.print("Index: {d}\n", .{genesis.index});
     std.debug.print("Timestamp: {d}\n", .{genesis.timestamp});
