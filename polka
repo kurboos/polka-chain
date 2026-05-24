@@ -1,0 +1,62 @@
+#!/usr/bin/env bash
+
+# polka - automated commit helper
+# This script runs lint/typecheck, stages changes, creates a commit.
+# It assumes a Node.js project with npm scripts "lint" and "typecheck" if they exist.
+
+set -e
+
+# Helper to run a command if it exists in package.json scripts
+run_npm_script() {
+  local script="$1"
+  if npm run | grep -q "$script"; then
+    echo "Running npm $script..."
+    npm run "$script"
+  else
+    echo "No npm $script script defined, skipping."
+  fi
+}
+
+# 1. Run lint and typecheck if available
+# Detect project type and run appropriate checks
+if [ -f package.json ]; then
+  run_npm_script lint
+  run_npm_script typecheck
+else
+  # Assume Zig project
+  if [ -f build.zig ]; then
+    echo "Running zig build..."
+    zig build
+  else
+    echo "Running zig fmt..."
+    zig fmt .
+  fi
+fi
+
+# 2. Show git status
+echo "Git status:"
+git status -s
+
+# 3. Prompt to add all changes or interactively select patches
+read -p "Add all changes? (y/N): " add_all
+if [[ "$add_all" == "y" || "$add_all" == "Y" ]]; then
+  git add .
+else
+  echo "Running interactive add (git add -p)..."
+  git add -p
+fi
+
+# 4. Ensure there is something to commit
+if git diff --cached --quiet; then
+  echo "No changes staged. Exiting."
+  exit 0
+fi
+
+# 5. Generate a simple commit message
+default_msg="chore: automated commit by polka"
+read -p "Commit message (default: '$default_msg'): " commit_msg
+commit_msg=${commit_msg:-$default_msg}
+
+git commit -m "$commit_msg"
+
+echo "Commit created successfully."
