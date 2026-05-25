@@ -1,12 +1,13 @@
-const std = @import("std");
-const Sha256 = std.crypto.hash.sha2.Sha256;
+const std = @import("std"); // Standard library. Containing utilities for memory management, debugging, etc.
+const Sha256 = std.crypto.hash.sha2.Sha256; // Sha256 is the encryption library used for the encrypting and decrypting.
 
+// Block: struct, structure of a block.
 const Block = struct {
-    index: u64,
-    timestamp: i64,
-    prev_hash: [32]u8,
-    nonce: u64,
-    hash: [32]u8,
+    index: u64, // The block index.
+    timestamp: i64, // the timestamp
+    prev_hash: [32]u8, // the previous hash
+    nonce: u64, // a number used once
+    hash: [32]u8, // current hash
 };
 
 fn calculateHash(block: Block) [32]u8 {
