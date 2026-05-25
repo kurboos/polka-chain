@@ -1,10 +1,10 @@
 const std = @import("std");
 const crypto = std.crypto;
 
-pub const Hash = [32]u8;        // Blake3-256 or SHA-256 (you can change later)
-pub const Address = [20]u8;     // 20-byte address (like Ethereum-style, or change to 32 for Solana-like)
-pub const Signature = [64]u8;   // Ed25519 or secp256k1 signature (adjust size if needed)
-pub const PublicKey = [32]u8;   // Ed25519 public key (common choice in modern chains)
+pub const Hash = [32]u8; // Blake3-256 or SHA-256 (you can change later)
+pub const Address = [20]u8; // 20-byte address (like Ethereum-style, or change to 32 for Solana-like)
+pub const Signature = [64]u8; // Ed25519 or secp256k1 signature (adjust size if needed)
+pub const PublicKey = [32]u8; // Ed25519 public key (common choice in modern chains)
 
 pub const HashFunction = crypto.hash.Blake3;
 
@@ -30,6 +30,7 @@ pub fn hashCombine(a: Hash, b: Hash) Hash {
 pub fn pubkeyToAddress(pubkey: PublicKey) Address {
     const h = hash(&pubkey);
     var addr: Address = undefined;
+    // TODO: Is memcpy the right way to do this? Maybe we can just slice it directly?
     @memcpy(&addr, h[0..20]);
     return addr;
 }
